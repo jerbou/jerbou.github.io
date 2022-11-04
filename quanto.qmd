@@ -17,8 +17,40 @@ When you click the **Render** button a document will be generated that includes:
 
 ## Code
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+Ce support de présentation va présenter quelques datavisualisations sur le jeux de données foret. When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
 
 ```{r}
-1 + 1
+# changement librairies ---------------------------------------------------
+library(readr)
+library(highcharter)
+library(echarts4r)
+#require(tm)
+#require(corpus)
+library(readxl)
+library(tidyverse)
+library(ggplot2)
+library(RColorBrewer)
+# read_delim("https://data.gouv.nc/api/v2/catalog/exports/csv?delimiter=%2C&lang=fr")
+library(viridisLite)
+library(httr)
+library(jsonlite)
+library(geojsonio)
+library(paletteer) 
+#paletteer_d("palettesForR::Echo")
+library(htmlwidgets)
+library(readr)
+
+
+df_foret <- read_csv("tab-foret.csv")
+evol<-  df_foret %>% arrange(Annee) %>%
+    # group_by(COMMUNE) %>% count() %>% arrange(desc(n)) %>%
+    hchart(type= 'line', hcaes(x=Annee, y =Surface.brulee, group=COMMUNE)) %>%
+    hc_yAxis(title = list(text = "Surfaces brulées en hectares")) %>%
+    hc_xAxis(title = list(text = "Année")) %>%
+    hc_title(text="Evolution des surfaces brulées par communes") %>%
+  # hc_colors( brewer.pal(n =  length(unique(df_foret$COMMUNE)), name = "Spectral"))   
+  hc_colors(c("#19AEFFFF","#0084C8FF","#005C94FF" ,"#FF4141FF" ,"#DC0000FF", "#B50000FF" , "#FFFF3EFF" , "#FF9900FF" , "#FF6600FF" , "#FFC022FF" , "#B88100FF" , "#804D00FF" , "#CCFF42FF",
+              "#9ADE00FF", "#009100FF", "#F1CAFFFF", " #D76CFFFF", " #BA00FFFF", " #BDCDD4FF", " #9EABB0FF", " #364E59FF", " #0E232EFF", " #FFFFFFFF", " #CCCCCCFF", " #999999FF", "#666666FF", "#2D2D2DFF"))
+
+evol
 ```
