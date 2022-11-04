@@ -1,7 +1,8 @@
 ---
-title: "Untitled"
+title: "Pacific Dataviz Challenge 2022 \n Feux de foret en graphes"
 format: revealjs
 editor: visual
+author : Jérôme Boutet
 ---
 
 ## Quarto
@@ -17,7 +18,7 @@ When you click the **Render** button a document will be generated that includes:
 
 ## Code
 
-Ce support de présentation va présenter quelques datavisualisations sur le jeux de données foret.
+Ce support de présentation va présenter quelques datavisualisations sur le [jeux de données de la saison administratif foret.](https://data.gouv.nc/explore/dataset/saison-administrative-des-feux-de-foret-depuis-2015/information/?disjunctive.commune) produit par le Gouvernement de la Nouvelle-Calédonie en 2020.
 
 ## graphique 1
 
@@ -105,4 +106,19 @@ df_foret %>% group_by(COMMUNE, Annee)  %>% summarise(sum_surt_tot = sum(Surface.
   hc_title(text="Nombre de départ de feux") %>%
   hc_colors(cols2) %>%
   hc_legend(align = "center",verticalAlign = "bottom")
+```
+
+## graphique 5
+
+```{r}
+recap1 <- df_foret %>% group_by( Annee)  %>% summarise(sum_surt_tot = sum(Surface.brulee), sum_nb_feux=sum(nb_depart_de_feu))
+
+
+highchart() %>% 
+  hc_yAxis_multiples(
+    list(lineWidth = 3),
+    list(showLastLabel = FALSE, opposite = TRUE)
+  ) %>% 
+  hc_add_series(data = recap1$sum_nb_feux , type="column", name="nombre de feux", yAxis=1) %>%
+  hc_add_series(data = recap1$sum_surt_tot , type = "line", name="surface total")
 ```
