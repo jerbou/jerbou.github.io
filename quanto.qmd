@@ -5,18 +5,13 @@ editor: visual
 author : Jérôme Boutet
 ---
 
-## Quarto
+## Principe
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+-   Vous pouvez cliquer avec le bouton de souris ou la flèche gauche pour faire dérouler chaque planche
 
-## Bullets
+-   Les graphiques sont interactifs, en cliquant sur les élements de légence, vous pouvez "faire apparaitre ou disparaitre" les élements. Au survol avec la souris, vous avez les chiffres.
 
-When you click the **Render** button a document will be generated that includes:
-
--   Content authored with markdown
--   Output from executable code
-
-## Code
+## Jeux de données utilisé 
 
 Ce support de présentation va présenter quelques datavisualisations sur le [jeux de données de la saison administratif foret.](https://data.gouv.nc/explore/dataset/saison-administrative-des-feux-de-foret-depuis-2015/information/?disjunctive.commune) produit par le Gouvernement de la Nouvelle-Calédonie en 2020.
 
@@ -97,18 +92,18 @@ df_foret %>% group_by(COMMUNE, Annee)  %>% summarise(sum_surt_tot = sum(Surface.
 ## graphique 5
 
 ```{r}
-cols2 <- viridis(length(unique(df_foret$nb_depart_de_feu)))
+cols2 <- viridis(length(unique(df_foret$Annee)))
 
 df_foret %>% group_by(COMMUNE, Annee)  %>% summarise(sum_surt_tot = sum(Surface.brulee), sum_nb_feux=sum(nb_depart_de_feu)) %>%
   hchart(type= 'bar', hcaes(x=COMMUNE, y =sum_surt_tot, group=Annee), stacking = "normal") %>%
-  hc_yAxis(title = list(text = "Surface brulée")) %>%
-  hc_xAxis(title = list(text = "Année")) %>%
+  hc_yAxis(title = list(text = "Surfaces brulées")) %>%
+  hc_xAxis(title = list(text = "Commune")) %>%
   hc_title(text="Nombre de départ de feux") %>%
   hc_colors(cols2) %>%
   hc_legend(align = "center",verticalAlign = "bottom")
 ```
 
-## graphique 5
+## graphique 6
 
 ```{r}
 recap1 <- df_foret %>% group_by( Annee)  %>% summarise(sum_surt_tot = sum(Surface.brulee), sum_nb_feux=sum(nb_depart_de_feu))
@@ -122,3 +117,9 @@ highchart() %>%
   hc_add_series(data = recap1$sum_nb_feux , type="column", name="nombre de feux", yAxis=1) %>%
   hc_add_series(data = recap1$sum_surt_tot , type = "line", name="surface total")
 ```
+
+## Présentation réalisée avec
+
+**Rstudio** et R librairies graphiques utilisées : [highcharter](https://jkunst.com/highcharter/)
+
+**Quarto**. En apprendre plus <https://quarto.org/docs/presentations/>.
